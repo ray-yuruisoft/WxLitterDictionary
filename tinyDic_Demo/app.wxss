@@ -43,11 +43,35 @@ page {
   font-family: 'FontAwesome';
 }
 
-.address-book {
-  font-size: 80rpx;
+.icon-book {
+  font-size: 40rpx;
 }
 
-.address-book:after {
-  content: '\f02e';
+.icon-book:after {
+  content: '\f02d';
   color: palevioletred;
+}
+
+.icon-edit{
+  font-size: 40rpx;
+}
+.icon-edit::after{
+  content: '\f013';
+  color: palevioletred;
+}
+
+.icon-phone{
+  font-size: 30rpx;
+}
+.icon-phone::before{
+  content: '\f095';
+  color: gray;
+}
+
+.icon-mobile-phone{
+  font-size: 30rpx;
+}
+.icon-mobile-phone::before{
+  content: '\f10b';
+  color: gray;
 }

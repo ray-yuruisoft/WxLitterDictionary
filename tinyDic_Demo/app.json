@@ -1,11 +1,12 @@
 {
   "pages": [
-    "Page/index"
-   
+    "Page/index",
+    "Page/Dictionary/Dictionary",
+    "Page/SetAutoNum/SetAutoNum"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "英语小词典",
+    "navigationBarTitleText": "英汉小词典",
     "navigationBarBackgroundColor": "#f8f8f8",
     "backgroundColor": "#f8f8f8"
   },

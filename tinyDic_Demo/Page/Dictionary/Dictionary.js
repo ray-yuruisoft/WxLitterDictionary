@@ -1,30 +1,18 @@
 var app = getApp();
 var FlagSetOut;
 
+var reg = /^[A-Za-z0-9\,\-\s+]+$/ //只包含数字，字母，逗号等
+var reg_han = /[\u4E00-\u9FA5\uF900-\uFA2D]/ //只包含汉字
+
+
 Page({
   data: {
-    list: [
-      {
-        icon:'icon-book',
-        id: 'dic',
-        name: '词典',
-        open: false,
-        pages: [{ displayName: '英汉翻译', url: 'Dictionary'}, { displayName: '汉英翻译', url: 'Dictionary' }],
-      },
-      {
-        icon:'icon-edit',
-        id: 'feedback',
-        name: '设置',
-        open: false,
-        pages: [{ displayName: '智能提示设置', url: 'SetAutoNum' }]
-      }
-    ],
-
-    inputShowed: false,//搜索
+    inputShowed: false,
     inputVal: ""
   },
-  /***
-   * 搜索
+  temp: {},
+  /***********************************
+   * 翻译逻辑 以下
    * 
    * 
    * 
@@ -99,7 +87,24 @@ Page({
   },
   inputTyping: function (e) {
     var that = this;
-
+    this.temp.inputdata = e.detail.value;
+    /***
+     * 单独增加，客户要求为区分英汉 汉英 以下
+     */
+    if (this.data.displayName == '英汉翻译')//英译汉
+    {
+      if (reg_han.test(e.detail.value))//有汉字就滚
+        return
+    }
+    else if (this.data.displayName == '汉英翻译') {//汉译英
+      if (reg.test(e.detail.value))//有英文就滚
+        return
+    }
+    else
+      return
+    /***
+     * 单独增加，客户要求为区分英汉 汉英 以上
+     */
     try {
       var TempObject = app.com.dealUrl(e.detail.value);
       if (TempObject.error)
@@ -156,9 +161,29 @@ Page({
   },
   translating: function (e) {
     var that = this;
-
+    if (e.detail.value == undefined)
+      var Tempvalue = this.temp.inputdata;
+    else
+      var Tempvalue = e.detail.value;
+    /***
+     * 单独增加，客户要求为区分英汉 汉英 以下
+     */
+    if (this.data.displayName == '英汉翻译')//英译汉
+    {
+      if (reg_han.test(e.detail.value))//有汉字就滚
+        return
+    }
+    else if (this.data.displayName == '汉英翻译') {//汉译英
+      if (reg.test(e.detail.value))//有英文就滚
+        return
+    }
+    else
+      return
+    /***
+     * 单独增加，客户要求为区分英汉 汉英 以上
+     */
     try {
-      var TempObject = app.com.dealUrl(e.detail.value);
+      var TempObject = app.com.dealUrl(Tempvalue);
       if (TempObject.error)
         return;
       var Tempkind = TempObject.kind;
@@ -222,16 +247,32 @@ Page({
     });
   },
 
+  /***
+     * 翻译逻辑 以上
+     * 
+     * 
+     * 
+     * ********************************/
+
+
+
+
+
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数  
-    var that = this;
-    wx.getStorage({
-      key: 'autodisplayNum',
-      success: function (res) {
-        console.log(res.data)
-        app.globalData.autodisplayNum = res.data
-      }
-    })
-  }
 
+    this.setData({
+      displayName: options.id
+    })
+    if (options.id == '英汉翻译') {
+      this.setData({
+        description: '该英汉词典词源来自于21世纪英汉词典'
+      })
+    }
+    else if (options.id == '汉英翻译') {
+      this.setData({
+        description: '该汉英词典词源来自于21世纪汉英词典'
+      })
+    }
+  }
 });
